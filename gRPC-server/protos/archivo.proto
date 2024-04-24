@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.archivoProto";
+option java_outer_classname = "ArchivoProto";
+option objc_class_prefix = "HLW";
+
+package archivoProto;
+
+message SalesRequest {
+  int32 year = 1;
+  int32 month = 2;
+}
+
+message SalesResponse {
+  int32 year = 1;
+  int32 month = 2;
+  string supplier = 3;
+  string item_code = 4;
+  string item_description = 5;
+  string item_type = 6;
+  string retail_sales = 7;
+  string etail_transfers = 8;
+  string warehouse_sales = 9;
+}
+
+message EmployeesRequest {
+  int32 year = 1;
+  string school = 2;
+}
+
+message EmployeesResponse {
+  string name = 1;
+  string school = 2;
+  string job_description = 3;
+  string department = 4;
+  string earnings = 5;
+  int32 year = 6;
+}
+
+service Services {
+  rpc GetSales(SalesRequest) returns (stream SalesResponse) {}
+  rpc GetEmployees(EmployeesRequest) returns (stream EmployeesResponse) {}
+}

@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+      MYSQL_DATABASE: "db1"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "123456"
+      MYSQL_ALLOW_LOCAL_INFILE: "1"
+      MYSQL_SECURE_FILE_PRIV: "/var/lib/mysql-files/" 
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./create_table.sql:/docker-entrypoint-initdb.d/create_table.sql
+      - ./higher_ed_employee_salaries.csv:/var/lib/mysql-files/higher_ed_employee_salaries.csv
+      - ./Warehouse_and_Retail_Sales.csv:/var/lib/mysql-files/Warehouse_and_Retail_Sales.csv
+      - ./load_data.sql:/docker-entrypoint-initdb.d/load_data.sql
+      - ./grant_permissions.sql:/docker-entrypoint-initdb.d/grant_permissions.sql
+    networks:
+      - net
+      
+networks:
+  net:
+    driver: bridge

@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+
+  redis-cluster:
+    image: 'bitnami/redis-cluster:latest'
+    container_name: 'redis-cluster'
+    ports:
+      - '6379:6379'
+      - '6380:6379'
+      - '6381:6379'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - ./redis.conf:/opt/bitnami/redis/etc/redis.conf
+    command: [ "redis-server", "/opt/bitnami/redis/etc/redis.conf" ]
+    networks:
+      - net
+
+networks:
+  net:
+    driver: bridge

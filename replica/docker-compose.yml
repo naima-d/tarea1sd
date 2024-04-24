@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+      
+  redis-master:
+    image: 'bitnami/redis:latest'
+    container_name: 'redis-master'
+    ports:
+      - '6379:6379'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_REPLICATION_MODE=master
+    volumes:
+      - ./redis.conf:/opt/bitnami/redis/etc/redis.conf
+    command: [ "redis-server", "/opt/bitnami/redis/etc/redis.conf" ]
+    networks:
+      - net
+
+  redis-slave1:
+    image: 'bitnami/redis:latest'
+    container_name: 'redis-slave1'
+    ports:
+      - '6380:6379'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_REPLICATION_MODE=slave
+      - REDIS_MASTER_HOST=redis-master
+      - REDIS_MASTER_PORT_NUMBER=6379
+    volumes:
+      - ./redis.conf:/opt/bitnami/redis/etc/redis.conf
+    command: [ "redis-server", "/opt/bitnami/redis/etc/redis.conf" ]
+    networks:
+      - net
+
+  redis-slave2:
+    image: 'bitnami/redis:latest'
+    container_name: 'redis-slave2'
+    ports:
+      - '6381:6379'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_REPLICATION_MODE=slave
+      - REDIS_MASTER_HOST=redis-master
+      - REDIS_MASTER_PORT_NUMBER=6379
+    volumes:
+      - ./redis.conf:/opt/bitnami/redis/etc/redis.conf
+    command: [ "redis-server", "/opt/bitnami/redis/etc/redis.conf" ]
+    networks:
+      - net
+
+networks:
+  net:
+    driver: bridge
